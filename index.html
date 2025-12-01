@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Beni Seviyor Musun?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        background: #ffb6d9;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    h1 {
+        margin-top: 60px;
+        color: white;
+        font-size: 40px;
+        text-shadow: 0 0 10px #ff4f9a;
+    }
+
+    #yes, #no {
+        padding: 15px 30px;
+        font-size: 22px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 20px;
+        transition: 0.25s;
+        font-weight: bold;
+    }
+
+    #yes {
+        background: #ff2e88;
+        color: white;
+    }
+
+    #no {
+        background: #ffffff;
+        color: #ff2e88;
+        position: absolute;
+    }
+
+    /* Kalp animasyonu */
+    .heart {
+        position: fixed;
+        bottom: -20px;
+        font-size: 20px;
+        color: red;
+        animation: floatUp 4s linear infinite;
+    }
+
+    @keyframes floatUp {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    /* Fotoğraf popup */
+    #popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(255, 0, 128, 0.6);
+        text-align: center;
+        transition: 0.4s;
+        z-index: 10;
+    }
+
+    #popup img {
+        width: 240px;
+        height: 240px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+
+    #popup p {
+        font-size: 22px;
+        margin-top: 15px;
+        color: #ff2e88;
+    }
+
+</style>
+</head>
+<body>
+
+<h1>Beni seviyor musun? ❤️</h1>
+
+<button id="yes">Evet</button>
+<button id="no">Hayır</button>
+
+<!-- Fotoğraf seçimi -->
+<input type="file" id="photoInput" accept="image/*" style="display:none">
+
+<!-- Popup -->
+<div id="popup">
+    <img id="popupImg" src="">
+    <p>Seni çok seviyorum ❤️</p>
+</div>
+
+<script>
+let yes = document.getElementById("yes");
+let no = document.getElementById("no");
+let popup = document.getElementById("popup");
+let popupImg = document.getElementById("popupImg");
+let photoInput = document.getElementById("photoInput");
+
+let yesSize = 1;
+
+// Hayır butonu kaçıyor
+no.addEventListener("mouseover", () => {
+    let x = Math.random() * (window.innerWidth - 100);
+    let y = Math.random() * (window.innerHeight - 100);
+    no.style.left = x + "px";
+    no.style.top = y + "px";
+});
+
+// Evet büyüyor
+yes.addEventListener("click", () => {
+    yesSize += 0.5;
+    yes.style.transform = `scale(${yesSize})`;
+
+    if (yesSize > 3) {
+        photoInput.click();      
+    }
+});
+
+// Foto yüklenince popup açılıyor
+photoInput.addEventListener("change", (event) => {
+    let file = event.target.files[0];
+    let reader = new FileReader();
+
+    reader.onload = function(e) {
+        popupImg.src = e.target.result;
+        popup.style.transform = "translate(-50%, -50%) scale(1)";
+    }
+
+    reader.readAsDataURL(file);
+});
+
+// Kalp yağmuru
+setInterval(() => {
+    let heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.fontSize = (20 + Math.random()*20) + "px";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 4000);
+}, 300);
+
+</script>
+
+</body>
+</html>
